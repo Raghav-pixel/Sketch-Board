@@ -48,6 +48,7 @@ body {
     left: 25vw;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 3px;
+    display: none;
 }
 
 .pencil-width-cont {
@@ -92,7 +93,7 @@ body {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     height: 2rem;
     width: 7rem;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: absolute;
