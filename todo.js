@@ -52,7 +52,7 @@ eraser.addEventListener('click', (e) => {
 sticky.addEventListener('click', (e) => {
     let stickyCont = document.createElement('div');
     stickyCont.setAttribute('class', 'sticky-cont');
-    stickyCont.innerHTML = `        
+    stickyCont.innerHTML = `
     <div class="header-cont">
         <div class="minimize"></div>
         <div class="remove"></div>
@@ -63,30 +63,32 @@ sticky.addEventListener('click', (e) => {
     `;
     document.body.appendChild(stickyCont);
 
+    // Find the minimize and remove buttons within the newly added sticky container
     let minimize = stickyCont.querySelector(".minimize");
     let remove = stickyCont.querySelector(".remove");
-    // noteActions(minimize, remove, stickyCont);
+    noteActions(minimize, remove, stickyCont);
 
     stickyCont.onmousedown = function(event) {
         dragAndDrop(stickyCont, event);
     };
-      
-    stickyCont.ondragstart = function() {
-        return false;
-    };
+
+    // stickyCont.ondragstart = function() {
+    //     return false;
+    // };
 });
 
-// function noteActions(minimize, remove, stickyCont) {
-//     console.log("inside notes action", remove);
-
-//     remove.addEventListener('click', (e) => {
-//         console.log("clicked", stickyCont);
-//         stickyCont.remove();
-//     });
-//     // minimize.addEventListener('click', (e) => {
-
-//     // })
-// }
+function noteActions(minimize, remove, stickyCont) {
+    remove.addEventListener('click', (e) => {
+        console.log("clicked");
+        stickyCont.remove();
+    });
+    minimize.addEventListener('click', (e) => {
+        let noteCont = stickyCont.querySelector('.note-cont');
+        let display = getComputedStyle(noteCont).getPropertyValue('display');
+        if(display === 'none') noteCont.style.display = 'flex';
+        else noteCont.style.display = 'none';
+    });
+}
 
 function dragAndDrop(element, event) {
     let shiftX = event.clientX - element.getBoundingClientRect().left;
@@ -94,7 +96,6 @@ function dragAndDrop(element, event) {
   
     element.style.position = 'absolute';
     element.style.zIndex = 1000;
-    document.body.append(element);
   
     moveAt(event.pageX, event.pageY);
   
