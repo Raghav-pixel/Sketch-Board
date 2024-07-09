@@ -9,6 +9,7 @@ let eraserFlag = false;
 let pencil = document.querySelector('.pencil');
 let eraser = document.querySelector('.eraser');
 let sticky = document.querySelector('.sticky');
+let upload = document.querySelector('.upload');
 
 // true -> tools show  false -> hide tools
 optionsCont.addEventListener('click', (e) => {
@@ -49,32 +50,58 @@ eraser.addEventListener('click', (e) => {
     }
 });
 
-sticky.addEventListener('click', (e) => {
+upload.addEventListener('click', (e) => {
+    let input = document.createElement('input');
+    input.setAttribute('type', "file");
+    input.click();
+    
+    input.addEventListener('change', (e) => {
+        let file = input.files[0];
+        let url = URL.createObjectURL(file);
+        let stickyTemplateHTML = `
+        <div class="header-cont">
+            <div class="minimize"></div>
+            <div class="remove"></div>
+        </div>
+        <div class="note-cont">
+            <img src="${url}" />
+        </div>
+        `;
+        createSticky(stickyTemplateHTML);
+    })
+})
+
+function createSticky(stickyTemplateHTML) {
     let stickyCont = document.createElement('div');
     stickyCont.setAttribute('class', 'sticky-cont');
-    stickyCont.innerHTML = `
+    stickyCont.innerHTML = stickyTemplateHTML;
+    document.body.appendChild(stickyCont);
+    
+    // Find the minimize and remove buttons within the newly added sticky container
+    let minimize = stickyCont.querySelector(".minimize");
+    let remove = stickyCont.querySelector(".remove");
+    noteActions(minimize, remove, stickyCont);
+    
+    stickyCont.onmousedown = function(event) {
+        dragAndDrop(stickyCont, event);
+    };
+    
+    stickyCont.ondragstart = function() {
+        return false;
+    };
+}
+
+sticky.addEventListener('click', (e) => {
+    let stickyTemplateHTML = `
     <div class="header-cont">
         <div class="minimize"></div>
         <div class="remove"></div>
     </div>
     <div class="note-cont">
-        <textarea></textarea>
+        <textarea spellcheck="false"></textarea>
     </div>
     `;
-    document.body.appendChild(stickyCont);
-
-    // Find the minimize and remove buttons within the newly added sticky container
-    let minimize = stickyCont.querySelector(".minimize");
-    let remove = stickyCont.querySelector(".remove");
-    noteActions(minimize, remove, stickyCont);
-
-    stickyCont.onmousedown = function(event) {
-        dragAndDrop(stickyCont, event);
-    };
-
-    // stickyCont.ondragstart = function() {
-    //     return false;
-    // };
+    createSticky(stickyTemplateHTML);
 });
 
 function noteActions(minimize, remove, stickyCont) {
